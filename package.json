@@ -1,0 +1,25 @@
+{
+  "name": "node-idw",
+  "version": "0.0.1",
+  "description": "IDW interpolation for nodejs, C++ addon",
+  "gypfile": true,
+  "main": "index.js",
+  "scripts": {
+    "test": "./test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zszszsz/node-idw.git"
+  },
+  "keywords": [
+    "idw",
+    "GIS"
+  ],
+  "author": "zszszsz",
+  "license": "LGPL-3.0",
+  "bugs": {
+    "url": "https://github.com/zszszsz/node-idw/issues"
+  },
+  "homepage": "https://github.com/zszszsz/node-idw#readme",
+  "dependencies": {}
+}
