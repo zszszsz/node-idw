@@ -1,6 +1,8 @@
 # node-idw
 inverse distance weighting interpolation for nodejs in C++
 ===
+
+````
 const idw = require('idw')
 ...
 points = [
@@ -13,9 +15,13 @@ points = [
 x = Array.from({length: width}, (v,k)=> x(k))
 y = Array.from({length: height}, (v,k)=> y(k))
 var interpolated = idw(points, x, y)
+````
+
 ===
 or
 ===
+
+````
 const idw = require('idw')
 value = [10,1,7,4,...]
 x = [11,2,8,5,...]
@@ -23,4 +29,4 @@ y=[12,3,9,6,...]
 X = Array.from({length: width}, (v,k)=> X(k))
 Y = Array.from({length: height}, (v,k)=> Y(k))
 var interpolated = idw(value, x, y, X, Y)
-
+````
