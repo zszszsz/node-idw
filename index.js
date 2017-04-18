@@ -1,5 +1,6 @@
 'use strict';
 
-const config = 'Release';// 'Debug'
+const config = 'Release';
+// const config = 'Debug';
 
 module.exports = require(`./build/${config}/idw`).idw;
