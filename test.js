@@ -1,11 +1,23 @@
 #!/usr/bin/node
 'use strict';
+const idw = require('./index.js');
 
-const config = 'Release';
+var points = [
+    { value: 10, longitude: 11, latitude: 12 },
+    { value: 1, longitude: 2, latitude: 3 },
+    { value: 7, longitude: 8, latitude: 9 },
+    { value: 4, longitude: 5, latitude: 6 }
+];
+var x = Array.from({ length: 20 }, (v, k) => k);
+var y = Array.from({ length: 20 }, (v, k) => k);
+var interpolated = idw(points, x, y);
+// console.log(interpolated);
 
-var idw = require(`./build/${configName}/idw`);
+var value = [10, 1, 7, 4];
+var x = [11, 2, 8, 5];
+var y = [12, 3, 9, 6];
+var X = Array.from({ length: 20 }, (v, k) => k);
+var Y = Array.from({ length: 20 }, (v, k) => k);
+var interpolated2 = idw(value, x, y, X, Y)
 
-console.log(Array.from({ length: 8 }, (v, k) => k / 2));
-
-// console.log(idw.idw([{ value: 2, longitude: 1, latitude: 1 }, { value: 1, longitude: 2, latitude: 2 }], Array.from({ length: 8 }, (v, k) => k / 2), Array.from({ length: 8 }, (v, k) => k / 2)));
-console.log(idw.idw([2, 1], [1, 2], [1, 2], Array.from({ length: 8 }, (v, k) => k / 2), Array.from({ length: 8 }, (v, k) => k / 2)))
+console.log(interpolated.every((col, y) => col.every((value, x) => value == interpolated2[y][x])));
