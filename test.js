@@ -8,16 +8,16 @@ var points = [
     { value: 7, longitude: 8, latitude: 9 },
     { value: 4, longitude: 5, latitude: 6 }
 ];
-var x = Array.from({ length: 20 }, (v, k) => k);
-var y = Array.from({ length: 20 }, (v, k) => k);
+var x = Array.from({ length: 5 }, (v, k) => k + 5);
+var y = Array.from({ length: 5 }, (v, k) => k + 5);
 var interpolated = idw(points, x, y);
-// console.log(interpolated);
+console.log(interpolated);
 
 var value = [10, 1, 7, 4];
 var x = [11, 2, 8, 5];
 var y = [12, 3, 9, 6];
-var X = Array.from({ length: 20 }, (v, k) => k);
-var Y = Array.from({ length: 20 }, (v, k) => k);
+var X = Array.from({ length: 5 }, (v, k) => k + 5);
+var Y = Array.from({ length: 5 }, (v, k) => k + 5);
 var interpolated2 = idw(value, x, y, X, Y)
 
 console.log(interpolated.every((col, y) => col.every((value, x) => value == interpolated2[y][x])));
