@@ -115,6 +115,11 @@ void idw(const v8::FunctionCallbackInfo<v8::Value> &args)
         result->Set(y, column);
     }
     args.GetReturnValue().Set(result);
+    free(pValues);
+    free(pLons);
+    free(pLats);
+    free(lons);
+    free(lats);
     return;
 }
 void init(Local<Object> exports)
