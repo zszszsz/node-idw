@@ -72,7 +72,7 @@ void idw(const v8::FunctionCallbackInfo<v8::Value> &args)
         }
         for (int x = 0; x < width; x++)
         {
-            lons[x] = Local<Number>::Cast(latInfo->Get(x))->NumberValue();
+            lons[x] = Local<Number>::Cast(lonInfo->Get(x))->NumberValue();
         }
         for (int p = 0; p < pNum; p++)
         {
