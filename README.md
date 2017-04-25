@@ -15,7 +15,8 @@ points = [
 ]
 x = Array.from({length: width}, (v,k)=> x(k))
 y = Array.from({length: height}, (v,k)=> y(k))
-var interpolated = idw(points, x, y)
+
+var interpolated = idw(points, x, y, [nth power])
 ````
 -----
 or
@@ -28,6 +29,6 @@ x = [11,2,8,5,...]
 y=[12,3,9,6,...]
 X = Array.from({length: width}, (v,k)=> X(k))
 Y = Array.from({length: height}, (v,k)=> Y(k))
-var interpolated = idw(value, x, y, X, Y)
+var interpolated = idw(value, x, y, X, Y, [nth power])
 ````
 -----

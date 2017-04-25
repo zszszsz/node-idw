@@ -1,6 +1,7 @@
 #include <node.h>
 #include <v8.h>
 #include <math.h>
+#include <iostream>
 using namespace v8;
 using namespace std;
 namespace idw
@@ -16,8 +17,9 @@ void idw(const v8::FunctionCallbackInfo<v8::Value> &args)
     int width = 0;
     int height = 0;
     int pNum = 0;
+    double n = 1;
 
-    if (args.Length() == 3)
+    if (args.Length() < 5)
     {
         Local<Array> pointInfo = Local<Array>::Cast(args[0]);
         Local<Array> lonInfo = Local<Array>::Cast(args[1]);
@@ -49,38 +51,40 @@ void idw(const v8::FunctionCallbackInfo<v8::Value> &args)
     }
     else
     {
-        if (args.Length() == 5)
+        Local<Array> pValueInfo = Local<Array>::Cast(args[0]);
+        Local<Array> pLonInfo = Local<Array>::Cast(args[1]);
+        Local<Array> pLatInfo = Local<Array>::Cast(args[2]);
+        Local<Array> lonInfo = Local<Array>::Cast(args[3]);
+        Local<Array> latInfo = Local<Array>::Cast(args[4]);
+
+        width = lonInfo->Length();
+        height = latInfo->Length();
+        pNum = pValueInfo->Length();
+
+        pValues = (double *)malloc(sizeof(double) * pNum);
+        pLons = (double *)malloc(sizeof(double) * pNum);
+        pLats = (double *)malloc(sizeof(double) * pNum);
+        lons = (double *)malloc(sizeof(double) * width);
+        lats = (double *)malloc(sizeof(double) * height);
+        for (int y = 0; y < height; y++)
         {
-            Local<Array> pValueInfo = Local<Array>::Cast(args[0]);
-            Local<Array> pLonInfo = Local<Array>::Cast(args[1]);
-            Local<Array> pLatInfo = Local<Array>::Cast(args[2]);
-            Local<Array> lonInfo = Local<Array>::Cast(args[3]);
-            Local<Array> latInfo = Local<Array>::Cast(args[4]);
-
-            width = lonInfo->Length();
-            height = latInfo->Length();
-            pNum = pValueInfo->Length();
-
-            pValues = (double *)malloc(sizeof(double) * pNum);
-            pLons = (double *)malloc(sizeof(double) * pNum);
-            pLats = (double *)malloc(sizeof(double) * pNum);
-            lons = (double *)malloc(sizeof(double) * width);
-            lats = (double *)malloc(sizeof(double) * height);
-            for (int y = 0; y < height; y++)
-            {
-                lats[y] = Local<Number>::Cast(latInfo->Get(y))->NumberValue();
-            }
-            for (int x = 0; x < width; x++)
-            {
-                lons[x] = Local<Number>::Cast(latInfo->Get(x))->NumberValue();
-            }
-            for (int p = 0; p < pNum; p++)
-            {
-                pValues[p] = Local<Number>::Cast(pValueInfo->Get(p))->NumberValue();
-                pLons[p] = Local<Number>::Cast(pLonInfo->Get(p))->NumberValue();
-                pLats[p] = Local<Number>::Cast(pLatInfo->Get(p))->NumberValue();
-            }
+            lats[y] = Local<Number>::Cast(latInfo->Get(y))->NumberValue();
         }
+        for (int x = 0; x < width; x++)
+        {
+            lons[x] = Local<Number>::Cast(latInfo->Get(x))->NumberValue();
+        }
+        for (int p = 0; p < pNum; p++)
+        {
+            pValues[p] = Local<Number>::Cast(pValueInfo->Get(p))->NumberValue();
+            pLons[p] = Local<Number>::Cast(pLonInfo->Get(p))->NumberValue();
+            pLats[p] = Local<Number>::Cast(pLatInfo->Get(p))->NumberValue();
+        }
+    }
+    Local<Value> nth = args[args.Length() - 1];
+    if (nth->IsNumber())
+    {
+        n = Local<Number>::Cast(nth)->NumberValue();
     }
     Local<Array> result = Array::New(isolate, height);
     for (int y = 0; y < height; y++)
@@ -100,6 +104,7 @@ void idw(const v8::FunctionCallbackInfo<v8::Value> &args)
                 double dist = sqrt(xdist * xdist + ydist * ydist);
                 if (dist != 0)
                 {
+                    dist = pow(dist, n);
                     norm += 1 / dist;
                     tmpResult += pValues[p] / dist;
                 }
