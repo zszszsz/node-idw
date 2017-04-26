@@ -17,7 +17,7 @@ var options = {
 
 Nth power to calculate the weight from distance :
 
-![equation](https://latex.codecogs.com/gif.latex?weight = distance^{nth})
+![equation](https://latex.codecogs.com/gif.latex?weight%20=%20distance^{nth})
 
 Default value is **1**.
 
