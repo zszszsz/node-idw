@@ -1,6 +1,6 @@
 # node-idw
-inverse distance weighting interpolation for nodejs in C++
-
+inverse distance weighted interpolation for nodejs in C++
+<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
 -----
 
 ````
@@ -16,7 +16,11 @@ var options = {
 
 **nth**: 
 
-Nth power of distance. default value is **1**.
+Nth power to calculate the weight from distance :
+
+$$weight = distance^{nth}$$
+
+Default value is **1**.
 
 --------
 
@@ -39,7 +43,7 @@ Default value is **2 * DBL_MIN**.
 
 **neighbor**:
 
-Threshold of neighborhood check.
+Threshold of neighborhood check :
 
 A **given point** will **NOT** be considered a **neighbor** of the grid point,
 
@@ -56,11 +60,11 @@ Default value is **DBL_MAX**.
 
 **loLim**: 
 
-Lower limit.
+Lower limit :
 
-If the value of a given point is lower than the limit,
+If the value of a given point is lower than this limit,
  
-it will be **skip**, **unless** it is a **neighbor** of the grid point.
+it will be **skiped**, **unless** it is **the same point** of the grid point.
 
 Default value is **-DBL_MAX**.
 
@@ -68,7 +72,7 @@ Default value is **-DBL_MAX**.
 
 **upLim**: 
 
-upper limit. same.
+Upper limit. same.
 
 Default value is **DBL_MAX**.
 
@@ -99,6 +103,7 @@ x = [11,2,8,5,...]
 y=[12,3,9,6,...]
 X = Array.from({length: width}, (v,k)=> X(k))
 Y = Array.from({length: height}, (v,k)=> Y(k))
+
 var interpolated = idw(value, x, y, X, Y, [options])
 ````
 
