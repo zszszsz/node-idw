@@ -12,7 +12,8 @@ var x = Array.from({ length: 40 }, (v, k) => k / 2);
 var y = Array.from({ length: 20 }, (v, k) => k);
 var options = {
     nth: 1,
-    neighbor: 0.01,
+    same: 0.01,
+    neighbor: 20,
     loLim: 0,
     upLim: 11
 }

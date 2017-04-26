@@ -20,7 +20,8 @@ void idw(const v8::FunctionCallbackInfo<v8::Value> &args)
     int height = 0;
     int pNum = 0;
     double nth = 1;
-    double neighbor = 2 * DBL_MIN;
+    double neighbor = DBL_MAX;
+    double same = 2 * DBL_MIN;
     double loLim = -DBL_MAX;
     double upLim = DBL_MAX;
 
@@ -90,7 +91,8 @@ void idw(const v8::FunctionCallbackInfo<v8::Value> &args)
     {
         Local<Object> options = Local<Object>::Cast(args[args.Length() - 1]);
         nth = options->Has(String::NewFromUtf8(isolate, "nth")) ? Local<Number>::Cast(options->Get(String::NewFromUtf8(isolate, "nth")))->NumberValue() : 1;
-        neighbor = options->Has(String::NewFromUtf8(isolate, "neighbor")) ? Local<Number>::Cast(options->Get(String::NewFromUtf8(isolate, "neighbor")))->NumberValue() : 2 * DBL_MIN;
+        same = options->Has(String::NewFromUtf8(isolate, "same")) ? Local<Number>::Cast(options->Get(String::NewFromUtf8(isolate, "same")))->NumberValue() : 2 * DBL_MIN;
+        neighbor = options->Has(String::NewFromUtf8(isolate, "neighbor")) ? Local<Number>::Cast(options->Get(String::NewFromUtf8(isolate, "neighbor")))->NumberValue() : DBL_MAX;
         loLim = options->Has(String::NewFromUtf8(isolate, "loLim")) ? Local<Number>::Cast(options->Get(String::NewFromUtf8(isolate, "loLim")))->NumberValue() : -DBL_MAX;
         upLim = options->Has(String::NewFromUtf8(isolate, "upLim")) ? Local<Number>::Cast(options->Get(String::NewFromUtf8(isolate, "upLim")))->NumberValue() : DBL_MAX;
     }
@@ -111,9 +113,9 @@ void idw(const v8::FunctionCallbackInfo<v8::Value> &args)
                 double xdist = lon - pLons[p];
                 double ydist = lat - pLats[p];
                 double dist = sqrt(xdist * xdist + ydist * ydist);
-                if (dist > neighbor)
+                if (dist > same)
                 {
-                    if (pValues[p] > upLim || pValues[p] < loLim)
+                    if (dist > neighbor || pValues[p] > upLim || pValues[p] < loLim)
                     {
                         continue;
                     }
@@ -128,7 +130,7 @@ void idw(const v8::FunctionCallbackInfo<v8::Value> &args)
                     break;
                 }
             }
-            column->Set(x, Number::New(isolate, tmpResult / norm));
+            column->Set(x, Number::New(isolate, norm = 0 ? 0 : tmpResult / norm));
         }
         result->Set(y, column);
     }

@@ -6,29 +6,53 @@ inverse distance weighting interpolation for nodejs in C++
 ````
 var options = {
     nth: ?,
+    same: ?,
     neighbor: ?,
     loLim: ?,
     upLim: ?
 }
 ````
+--------
 
 **nth**: 
 
-set nth power of distance. default value is **1**.
+Nth power of distance. default value is **1**.
 
-**neighbor**: 
+--------
 
-set threshold of neighborhood check : 
+**same**: 
 
-A **given point** will be considered as a **neighbor** of the **grid point**,
+Threshold of same point check : 
 
-if the distance between them is **lower** than the **threshold**.
+A **given point** will be considered as the **same point** of the **grid point**,
 
-The **value** of the **grid point** will be set to the value of the given neighbor point.
+if the distance between them is **lower** than this threshold.
+
+The **value** of the **grid point** will be set to the value of the given point,
 
 And the interpolation process for this grid point will **stop immediately**.
 
 Default value is **2 * DBL_MIN**.
+
+--------
+
+
+**neighbor**:
+
+Threshold of neighborhood check.
+
+A **given point** will **NOT** be considered a **neighbor** of the grid point,
+
+if the distance between them is **larger** than this threshold.
+
+Only neighbor points have effect on the grid point,
+
+which means the given point will be **skiped** if it is not a neighbor.
+
+Default value is **DBL_MAX**.
+
+--------
+
 
 **loLim**: 
 
@@ -40,11 +64,15 @@ it will be **skip**, **unless** it is a **neighbor** of the grid point.
 
 Default value is **-DBL_MAX**.
 
+--------
+
 **upLim**: 
 
 upper limit. same.
 
 Default value is **DBL_MAX**.
+
+--------
 ````
 const idw = require('idw')
 ...
@@ -60,9 +88,9 @@ y = Array.from({length: height}, (v,k)=> y(k))
 
 var interpolated = idw(points, x, y, [options])
 ````
------
+
 or
-===
+
 
 ````
 const idw = require('idw')
@@ -73,4 +101,4 @@ X = Array.from({length: width}, (v,k)=> X(k))
 Y = Array.from({length: height}, (v,k)=> Y(k))
 var interpolated = idw(value, x, y, X, Y, [options])
 ````
------
+
