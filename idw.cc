@@ -1,6 +1,8 @@
 #include <node.h>
 #include <v8.h>
 #include <math.h>
+#include <limits.h>
+#include <values.h>
 #include <iostream>
 using namespace v8;
 using namespace std;
@@ -17,7 +19,10 @@ void idw(const v8::FunctionCallbackInfo<v8::Value> &args)
     int width = 0;
     int height = 0;
     int pNum = 0;
-    double n = 1;
+    double nth = 1;
+    double neighbor = 2 * DBL_MIN;
+    double loLim = -DBL_MAX;
+    double upLim = DBL_MAX;
 
     if (args.Length() < 5)
     {
@@ -39,7 +44,7 @@ void idw(const v8::FunctionCallbackInfo<v8::Value> &args)
         }
         for (int x = 0; x < width; x++)
         {
-            lons[x] = Local<Number>::Cast(latInfo->Get(x))->NumberValue();
+            lons[x] = Local<Number>::Cast(lonInfo->Get(x))->NumberValue();
         }
         for (int p = 0; p < pNum; p++)
         {
@@ -81,10 +86,13 @@ void idw(const v8::FunctionCallbackInfo<v8::Value> &args)
             pLats[p] = Local<Number>::Cast(pLatInfo->Get(p))->NumberValue();
         }
     }
-    Local<Value> nth = args[args.Length() - 1];
-    if (nth->IsNumber())
+    if (args.Length() % 2 == 0)
     {
-        n = Local<Number>::Cast(nth)->NumberValue();
+        Local<Object> options = Local<Object>::Cast(args[args.Length() - 1]);
+        nth = options->Has(String::NewFromUtf8(isolate, "nth")) ? Local<Number>::Cast(options->Get(String::NewFromUtf8(isolate, "nth")))->NumberValue() : 1;
+        neighbor = options->Has(String::NewFromUtf8(isolate, "neighbor")) ? Local<Number>::Cast(options->Get(String::NewFromUtf8(isolate, "neighbor")))->NumberValue() : 2 * DBL_MIN;
+        loLim = options->Has(String::NewFromUtf8(isolate, "loLim")) ? Local<Number>::Cast(options->Get(String::NewFromUtf8(isolate, "loLim")))->NumberValue() : -DBL_MAX;
+        upLim = options->Has(String::NewFromUtf8(isolate, "upLim")) ? Local<Number>::Cast(options->Get(String::NewFromUtf8(isolate, "upLim")))->NumberValue() : DBL_MAX;
     }
     Local<Array> result = Array::New(isolate, height);
     for (int y = 0; y < height; y++)
@@ -99,12 +107,17 @@ void idw(const v8::FunctionCallbackInfo<v8::Value> &args)
             double tmpResult = 0;
             for (int p = 0; p < pNum; p++)
             {
+
                 double xdist = lon - pLons[p];
                 double ydist = lat - pLats[p];
                 double dist = sqrt(xdist * xdist + ydist * ydist);
-                if (dist != 0)
+                if (dist > neighbor)
                 {
-                    dist = pow(dist, n);
+                    if (pValues[p] > upLim || pValues[p] < loLim)
+                    {
+                        continue;
+                    }
+                    dist = pow(dist, nth);
                     norm += 1 / dist;
                     tmpResult += pValues[p] / dist;
                 }
