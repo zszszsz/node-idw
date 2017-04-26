@@ -1,6 +1,5 @@
 # node-idw
 inverse distance weighted interpolation for nodejs in C++
-<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"></script>
 -----
 
 ````
@@ -18,7 +17,7 @@ var options = {
 
 Nth power to calculate the weight from distance :
 
-$$weight = distance^{nth}$$
+![equation](https://latex.codecogs.com/gif.latex?weight = distance^{nth})
 
 Default value is **1**.
 
