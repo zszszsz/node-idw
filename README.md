@@ -89,7 +89,8 @@ points = [
 x = Array.from({length: width}, (v,k)=> x(k))
 y = Array.from({length: height}, (v,k)=> y(k))
 
-var interpolated = idw(points, x, y, [options])
+var interpolated = idw.sync(points, x, y, [options])
+var interpolated = idw.async(points, x, y, [options], callback)
 ````
 
 or
@@ -103,6 +104,7 @@ y=[12,3,9,6,...]
 X = Array.from({length: width}, (v,k)=> X(k))
 Y = Array.from({length: height}, (v,k)=> Y(k))
 
-var interpolated = idw(value, x, y, X, Y, [options])
+var interpolated = idw.sync(value, x, y, X, Y, [options])
+var interpolated = idw.async(value, x, y, X, Y, [options], callback)
 ````
 

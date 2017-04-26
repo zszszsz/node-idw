@@ -3,4 +3,4 @@
 const config = 'Release';
 // const config = 'Debug';
 
-module.exports = require(`./build/${config}/idw`).idw;
+module.exports = require(`./build/${config}/idw`);
