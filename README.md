@@ -17,7 +17,7 @@ var options = {
 
 Nth power to calculate the weight from distance :
 
-![equation](http://www.sciweavers.org/tex2img.php?eq=weight%20=%20distance^{nth})
+weight = distance^nth
 
 Default value is **1**.
 
