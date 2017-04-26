@@ -12,13 +12,39 @@ var options = {
 }
 ````
 
-**nth**: set nth power of distance;
+**nth**: 
 
-**neighbor**: set threshold of neighborhood check : the process of interpolation will stop and the value of the unknown point will be set to the value of its given neighbor
+set nth power of distance. default value is **1**.
 
-**loLim**: Lower limit. If the value of a given point is lower than the limit, it will be skip, unless it is a neighbor of the unknown point.
+**neighbor**: 
 
-**upLim**: upper limit. same.
+set threshold of neighborhood check : 
+
+A **given point** will be considered as a **neighbor** of the **grid point**,
+
+if the distance between them is **lower** than the **threshold**.
+
+The **value** of the **grid point** will be set to the value of the given neighbor point.
+
+And the interpolation process for this grid point will **stop immediately**.
+
+Default value is **2 * DBL_MIN**.
+
+**loLim**: 
+
+Lower limit.
+
+If the value of a given point is lower than the limit,
+ 
+it will be **skip**, **unless** it is a **neighbor** of the grid point.
+
+Default value is **-DBL_MAX**.
+
+**upLim**: 
+
+upper limit. same.
+
+Default value is **DBL_MAX**.
 ````
 const idw = require('idw')
 ...
